@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Thêm/Sửa Category</title>
+</head>
+<body>
+<main layout:fragment="content">
+
+    <h3 th:text="${category.categoryId != null} ? '✏ Sửa Category' : '➕ Thêm Category'"></h3>
+
+    <form th:action="@{/categories/save}" method="post" enctype="multipart/form-data"
+          th:object="${category}">
+        <input type="hidden" th:field="*{categoryId}"/>
+
+        <!-- Tên -->
+        <div class="mb-3">
+            <label class="form-label">Tên Category</label>
+            <input type="text" th:field="*{categoryname}" class="form-control" required/>
+        </div>
+
+        <!-- Upload ảnh -->
+        <div class="mb-3">
+            <label class="form-label">Ảnh</label>
+            <input type="file" name="file" class="form-control"/>
+            <div th:if="${category.images != null}">
+                <img th:src="@{/uploads/{img}(img=${category.images})}" width="100" class="mt-2"/>
+            </div>
+        </div>
+
+        <!-- Trạng thái -->
+        <div class="mb-3">
+            <label class="form-label">Trạng thái</label>
+            <select th:field="*{status}" class="form-select">
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+            </select>
+        </div>
+
+        <!-- Nút -->
+        <button type="submit" class="btn btn-success">💾 Lưu</button>
+        <a th:href="@{/categories}" class="btn btn-secondary">↩ Quay lại</a>
+    </form>
+
+</main>
+</body>
+</html>

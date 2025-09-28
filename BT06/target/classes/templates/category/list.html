@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Danh sách Category</title>
+</head>
+<body>
+<main layout:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3>📂 Danh sách Categories</h3>
+        <a th:href="@{/categories/add}" class="btn btn-primary">+ Thêm Category</a>
+    </div>
+
+    <!-- Form tìm kiếm -->
+    <form class="row mb-3" method="get" th:action="@{/categories}">
+        <div class="col-md-4">
+            <input type="text" name="keyword" th:value="${keyword}" class="form-control"
+                   placeholder="🔍 Nhập tên category để tìm..."/>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-outline-success">Tìm kiếm</button>
+        </div>
+    </form>
+
+    <!-- Bảng danh sách -->
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Ảnh</th>
+            <th>Tên Category</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c, st : ${categories}">
+            <td th:text="${st.index + 1}"></td>
+            <td>
+                <img th:if="${c.images != null}" th:src="@{/uploads/{img}(img=${c.images})}"
+                     width="80" class="rounded"/>
+            </td>
+            <td th:text="${c.categoryname}"></td>
+            <td>
+                <span th:text="${c.status == 1 ? 'Active' : 'Inactive'}"
+                      th:classappend="${c.status == 1 ? 'badge bg-success' : 'badge bg-secondary'}"></span>
+            </td>
+            <td>
+                <a th:href="@{/categories/edit/{id}(id=${c.categoryId})}" class="btn btn-sm btn-warning">✏ Sửa</a>
+                <a th:href="@{/categories/delete/{id}(id=${c.categoryId})}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
+                   class="btn btn-sm btn-danger">🗑 Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Phân trang -->
+    <nav th:if="${categories.totalPages > 1}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${categories.first}? 'disabled'">
+                <a class="page-link" th:href="@{/categories(page=${categories.number - 1}, keyword=${keyword})}">«</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, categories.totalPages - 1)}"
+                th:classappend="${i == categories.number} ? 'active'">
+                <a class="page-link" th:href="@{/categories(page=${i}, keyword=${keyword})}"
+                   th:text="${i+1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${categories.last}? 'disabled'">
+                <a class="page-link" th:href="@{/categories(page=${categories.number + 1}, keyword=${keyword})}">»</a>
+            </li>
+        </ul>
+    </nav>
+
+</main>
+</body>
+</html>

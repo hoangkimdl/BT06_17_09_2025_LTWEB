@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <div th:fragment="header">
+      <div class="topbar">
+        <div class="brand">
+          <img src="/images/me.jpg" alt="avatar" class="avatar" />
+          <div class="brand-text">
+            <h1>BT06</h1>
+            <p>Quản trị - Thymeleaf</p>
+          </div>
+        </div>
+        <nav class="nav">
+          <a th:href="@{/}">Home</a>
+          <a th:href="@{/categories}">Categories</a>
+        </nav>
+      </div>
+    </div>
+  </body>
+</html>
